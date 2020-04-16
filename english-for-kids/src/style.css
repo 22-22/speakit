@@ -168,11 +168,12 @@
     text-align: center;
     cursor: pointer;
     background: linear-gradient(180deg,#0099ae,#00bf82 40%,#fff 0,#fff);
-    transition: .3s;
+    transition: all .5s linear;
 }
 
 .red {
     background: linear-gradient(180deg,#fd6a63,#feb46b 40%,#fff 0,#fff);
+    transition: all .5s linear;
 }
 
 .main-card img {
