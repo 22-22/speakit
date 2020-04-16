@@ -67,6 +67,90 @@
     box-shadow: inset 0 0 6px 0 yellow;
 }
 
+/*******************BURGER******************/
+
+.burger {
+    position: relative;
+    width: 30px;
+    height: 22px;
+    margin-left: 70px;
+    z-index: 5;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.77,.2,.05,1);   
+}
+
+.burger__line,
+.burger::before,
+.burger::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    background-color: navy;
+    border-radius: 5px;
+    width: 100%;
+    height: 3px;
+    left: 0;
+}
+    
+.burger::before {
+    top: 0;
+}
+      
+.burger::after {
+    bottom: 0;
+}
+    
+.burger__line {
+    top: calc( 50% - 1.5px );
+}
+
+.burger-active {
+    transform: rotate(90deg); 
+    transition: transform 0.5s cubic-bezier(.77,.2,.05,1);   
+}
+
+.navigation {
+    position: relative;    
+}
+
+.menu {
+    background: linear-gradient(40deg,#00bf82,#0099ae);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    position: absolute;
+    width: 380px;
+    height: calc(100vh + 20px);
+    margin: -100px 0 0;
+    padding: 150px 50px 50px;
+    /* left: calc(675px - 50vw); */
+    /* background: linear-gradient(40deg,#ffd86f,#fc6262); */
+     list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+     /* transform-origin: 0 0; */
+    transition: transform .5s cubic-bezier(.77,.2,.05,1); 
+    transform: translate(-100%);
+    z-index: 2;
+}
+
+.menu-active {
+    transform: translate(0);
+}
+
+.menu__item {
+    padding: 10px 0;
+    font-size: 22px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 0 0 60px;
+    color: #fff;
+    min-width: 145px;
+    text-align: left;
+}
+
+.menu-item.active {
+    text-decoration: underline;
+}
 /*******************MAIN******************/
 
 .main-card {
@@ -108,9 +192,8 @@
 .card {
     display: flex;
     margin: 20px 25px;
-    border: 1px solid black;
     border-radius: 5px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .4);
+    box-shadow: 0 1px 7px 0 rgba(0, 0, 0, .4);
     transition: box-shadow .25s linear, transform .8s ;
     box-sizing: border-box;
     justify-content: flex-end; 
