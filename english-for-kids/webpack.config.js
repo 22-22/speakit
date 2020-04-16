@@ -13,6 +13,7 @@ module.exports = (env, options) => {
         devtool: isProduction ? 'none' : 'source-map',
         watch: !isProduction,
         entry: ['./src/script.js', './src/style.css'],
+        //entry: './src/script.js',
         output: {
             path: path.join(__dirname, '/dist'),
             filename: 'main.js',
@@ -54,7 +55,7 @@ module.exports = (env, options) => {
         },
 
         plugins: [
-            // new CleanWebpackPlugin(),
+          //   new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
                 template: 'index.html'
             }),
@@ -62,7 +63,6 @@ module.exports = (env, options) => {
                 filename: 'style.css'
             }),
             new CopyWebpackPlugin([
-                // {from: './src/static', to: './'},
                 {from: './src/assets/img', to: './img'},
               ]),
         ]
@@ -70,3 +70,4 @@ module.exports = (env, options) => {
 
     return config;
 }
+
