@@ -407,9 +407,10 @@ const cardsData = [
 // сделать разметку для двух страниц, выкинуть их из дома и при переходе подставлять эти страницы в контейнер
 // get each page after the document is loaded
 const mainPage = document.querySelector('#main')
-const categoryPage = document.querySelector('#category')
+let categoryPage = document.querySelector('#category')
 const pageContainer = document.querySelector('#pageContainer');
 const mainCard = document.querySelectorAll('.main-card');
+const burger = document.querySelector('.burger')
 
 // remove templates from DOM
 // pageContainer.removeChild(mainPage);
@@ -418,37 +419,44 @@ pageContainer.removeChild(categoryPage);
 // append mainPage
 // pageContainer.append(mainPage);
 
+function generateCard(categoryCount) {
+  categoryPage.innerHTML = '';
+  cardsData[categoryCount].forEach(el => {
+
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card-container');
+    cardElement.innerHTML = ` <div class="card">
+  <div class="card__front" style="background-image: url(${el.image}); ">
+      <div class="card__word">${el.word}</div>
+  </div>
+  <div class="card__back  " style="background-image: url(${el.image}); ">
+      <div class="card__word">${el.translation}</div>
+  </div>
+  <div class="card__rotate"></div>
+</div>`;
+    categoryPage.append(cardElement);
+  });
+  // go back on main page we can only when click to menu
+  categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating"></div>')
+  categoryPage.insertAdjacentHTML('beforeend', '<div class="buttons"></div>')
+  pageContainer.append(categoryPage);
+  return pageContainer;
+
+}
+
 mainPage.addEventListener('click', (event) => {
 
   if (event.target.tagName === 'IMG' || event.target.tagName === 'A') {
     pageContainer.removeChild(mainPage);
 
-    let currentCategory;
+    let currentCategory = 0;
     categoryNames.forEach((item, idx) => {
       if (item === event.target.textContent || item === event.target.getAttribute("alt")) {
         currentCategory = idx;
       }
     })
+    generateCard(currentCategory);
 
-    // create a card (in a container needed for flipping)
-    cardsData[currentCategory].forEach(el => {
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('card-container');
-      cardElement.innerHTML = ` <div class="card">
-    <div class="card__front" style="background-image: url(${el.image}); ">
-        <div class="card__word">${el.word}</div>
-    </div>
-    <div class="card__back  " style="background-image: url(${el.image}); ">
-        <div class="card__word">${el.translation}</div>
-    </div>
-    <div class="card__rotate"></div>
-</div>`;
-      categoryPage.append(cardElement);
-    });
-    // go back on main page we can only when click to menu
-    categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating"></div>')
-    categoryPage.insertAdjacentHTML('beforeend', '<div class="buttons"></div>')
-    pageContainer.append(categoryPage);
   }
 })
 
@@ -471,3 +479,62 @@ categoryPage.addEventListener('mouseout', (event) => {
 
 // where to keep layout?
 // where to keep logic how to render lists?
+
+// burger
+burger.addEventListener('click', (e) => {
+  if (burger.classList.contains('burger-active')) {
+    burger.classList.remove('burger-active');
+    document.querySelector('.menu').classList.remove('menu-active');
+  } else {
+    burger.classList.add('burger-active');
+    document.querySelector('.menu').classList.add('menu-active');
+  }
+})
+
+// menu links
+document.querySelector('.menu').addEventListener('click', (event) => {
+if (event.target.tagName === 'A') {
+  if (pageContainer.children[0].id === 'main') {
+    if (event.target.textContent === 'Main Page') {
+
+      burger.classList.remove('burger-active');
+      document.querySelector('.menu').classList.remove('menu-active');
+    } else {
+      pageContainer.removeChild(mainPage);
+      let currentCategory = 0;
+      categoryNames.forEach((item, idx) => {
+        if (item === event.target.textContent) {
+          currentCategory = idx;
+        }
+      })
+     
+      generateCard(currentCategory);
+    }
+  } else {
+    if (event.target.textContent === 'Main Page') {
+      pageContainer.removeChild(categoryPage);
+      pageContainer.append(mainPage);
+    } else {
+
+      pageContainer.removeChild(categoryPage);
+      let currentCategory = 0;
+      categoryNames.forEach((item, idx) => {
+        if (item === event.target.textContent) {
+          currentCategory = idx;
+        }
+      })
+    generateCard(currentCategory);
+    }
+  }
+
+  burger.classList.remove('burger-active');
+  document.querySelector('.menu').classList.remove('menu-active');
+}
+})
+
+// document.querySelector('main').addEventListener('click', (e) => {
+//   if (burger.classList.contains('burger-active')) {
+//     burger.classList.remove('burger-active');
+//     document.querySelector('.menu').classList.remove('menu-active');
+//   } 
+// })
