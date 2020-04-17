@@ -22,8 +22,7 @@ const conf = {
             template: './index.html'
         }),
         new CopyPlugin([
-            { from: './src/style', to: './style' },
-            { from: './src/assets', to: './assets' },
+            { from: './src/', to: './' },
         ]),
     ]
 }
