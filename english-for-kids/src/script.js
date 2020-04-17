@@ -2,7 +2,6 @@ import cardsData from './data'
 // import categoryNames from './data'
 const categoryNames = ['Action (set A)', 'Action (set B)', 'Emotions', 'Animal (set A)', 'Animal (set B)', 'City', 'Nature', 'Clothes'];
 
-
 // сделать разметку для двух страниц, выкинуть их из дома и при переходе подставлять эти страницы в контейнер
 // get each page after the document is loaded
 const mainPage = document.querySelector('#main')
@@ -19,15 +18,36 @@ pageContainer.removeChild(categoryPage);
 // append mainPage
 // pageContainer.append(mainPage);
 
+function audioShuffle(categoryCount) {
+  let arrShuffle = [];
+  cardsData[categoryCount].forEach(el => {
+    arrShuffle.push(el);
+    for (let i = arrShuffle.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [arrShuffle[i], arrShuffle[j]] = [arrShuffle[j], arrShuffle[i]];
+    }
+    return arrShuffle;
+  })
+  return arrShuffle;
+}
+
+// function soundNext(arr, count) {
+// }
+
 function generateCard(categoryCount) {
+  let count = 0;
+  let soundRandom;
+  let soundCorrect = new Audio('./assets/audio/correct.mp3');
+  let soundError = new Audio('./assets/audio/error.mp3');
+  let random = audioShuffle(categoryCount);
+
   categoryPage.innerHTML = '';
   let cardElement;
   cardsData[categoryCount].forEach(el => {
-
     cardElement = document.createElement('div');
     cardElement.classList.add('card-container');
     cardElement.innerHTML = ` <div class="card">
-  <div class="card__front" style="background-image: url(${el.image}); ">
+  <div class="card__front" data-word="${el.word}" style="background-image: url(${el.image}); ">
       <div class="card__word">${el.word}</div>
   </div>
   <div class="card__back  " style="background-image: url(${el.image}); ">
@@ -39,6 +59,24 @@ function generateCard(categoryCount) {
       if (!e.target.classList.contains('card__rotate') && switcher.checked === false) {
         let sound = new Audio(el.audioSrc);
         sound.play();
+      } else {
+        if (event.target.classList.contains('card-inactive')) return;
+        if (document.querySelector('.btn').classList.contains('repeat')) {
+          if (e.target.getAttribute('data-word') === random[count].word) {
+            count++;
+            soundCorrect.play();
+            document.querySelector('.rating').insertAdjacentHTML('beforeend', '<div class="star-correct"></div>');
+            event.target.classList.add('card-inactive');
+            setTimeout(function () {
+              soundRandom = new Audio(random[count].audioSrc);
+              soundRandom.play();
+            }, 800);
+            // soundNext(random, count);
+          } else {
+            soundError.play();
+            document.querySelector('.rating').insertAdjacentHTML('beforeend', '<div class="star-error"></div>');
+          }
+        }
       }
     })
     categoryPage.append(cardElement);
@@ -48,7 +86,23 @@ function generateCard(categoryCount) {
   categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating"></div>')
   categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn hidden">Start game</button></div>')
   pageContainer.append(categoryPage);
-  return pageContainer;
+
+  // return pageContainer;
+
+  document.querySelector('.btn').addEventListener('click', (e) => {
+    if (switcher.checked === true) {
+      document.querySelector('.btn').classList.add('repeat');
+      let soundRandomFirst = new Audio(random[count].audioSrc);
+
+      soundRandomFirst.play();
+
+      // if correct 
+      // success sound, success star, right card inactive, nextSound()
+
+      // if wrong
+      // error sound, error star
+    }
+  })
 }
 
 mainPage.addEventListener('click', (event) => {
@@ -113,7 +167,6 @@ document.querySelector('.menu').addEventListener('click', (event) => {
             currentCategory = idx;
           }
         })
-
         generateCard(currentCategory);
       }
     } else {
@@ -132,14 +185,12 @@ document.querySelector('.menu').addEventListener('click', (event) => {
         generateCard(currentCategory);
       }
     }
-
     burger.classList.remove('burger-active');
     document.querySelector('.menu').classList.remove('menu-active');
   }
 })
 
-
-// document.querySelector('main').addEventListener('click', (e) => {
+// document.addEventListener('click', (e) => {
 //     burger.classList.remove('burger-active');
 //     document.querySelector('.menu').classList.remove('menu-active');
 // })
@@ -162,8 +213,8 @@ switcher.addEventListener('click', (e) => {
         el.classList.add('hidden');
       })
       document.querySelectorAll('.card__front').forEach(el => {
-        el.classList.add('card__cover');
-      document.querySelector('.btn').classList.remove('hidden');
+        el.classList.add('card-cover');
+        document.querySelector('.btn').classList.remove('hidden');
       })
     } else {
       document.querySelectorAll('.card__rotate').forEach(el => {
@@ -173,10 +224,11 @@ switcher.addEventListener('click', (e) => {
         el.classList.remove('hidden');
       })
       document.querySelectorAll('.card__front').forEach(el => {
-        el.classList.remove('card__cover');
+        el.classList.remove('card-cover');
       })
       document.querySelector('.btn').classList.add('hidden');
     }
   }
 })
+
 
