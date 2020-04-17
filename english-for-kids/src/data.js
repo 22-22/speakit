@@ -9,13 +9,13 @@ const cardsData = [
     {
       word: 'laugh',
       translation: 'смеяться',
-      image: './assets/img/action-set-a/laugh.png',
+      image: './assets/img/action-set-a/laugh.jpg',
       audioSrc: './assets/audio/action-set-a/laugh.mp3'
     },
     {
       word: 'open',
       translation: 'открывать',
-      image: './assets/img/action-set-a/open.png',
+      image: './assets/img/action-set-a/open.jpg',
       audioSrc: './assets/audio/action-set-a/open.mp3'
     },
     {
@@ -27,7 +27,7 @@ const cardsData = [
     {
       word: 'sleep',
       translation: 'спать',
-      image: './assets/img/action-set-a/sleep.png',
+      image: './assets/img/action-set-a/sleep.jpg',
       audioSrc: './assets/audio/action-set-a/sleep.mp3'
     },
     {
@@ -45,7 +45,7 @@ const cardsData = [
     {
       word: 'watch',
       translation: 'смотреть',
-      image: './assets/img/action-set-a/watch.png',
+      image: './assets/img/action-set-a/watch.jpg',
       audioSrc: './assets/audio/action-set-a/watch.mp3'
     }
   ],
@@ -265,7 +265,7 @@ const cardsData = [
     {
       word: 'city',
       translation: 'город',
-      image: './assets/img/city/city.png',
+      image: './assets/img/city/city.jpg',
       audioSrc: './assets/audio/city/city.mp3'
     },
     {
@@ -277,7 +277,7 @@ const cardsData = [
     {
       word: 'phone',
       translation: 'телефон',
-      image: './assets/img/city/phone.png',
+      image: './assets/img/city/phone.jpg',
       audioSrc: './assets/audio/city/phone.mp3'
     },
     {
@@ -295,7 +295,7 @@ const cardsData = [
     {
       word: 'traffic light',
       translation: 'светофор',
-      image: './assets/img/city/traffic-light.png',
+      image: './assets/img/city/traffic-light.jpg',
       audioSrc: './assets/audio/city/traffic-light.mp3'
     }
   ],
@@ -327,13 +327,13 @@ const cardsData = [
     {
       word: 'watermelon',
       translation: 'арбуз',
-      image: './assets/img/nature/watermelon.png',
+      image: './assets/img/nature/watermelon.jpg',
       audioSrc: './assets/audio/nature/watermelon.mp3'
     },
     {
       word: 'wave',
       translation: 'волна',
-      image: './assets/img/nature/wave.png',
+      image: './assets/img/nature/wave.jpg',
       audioSrc: './assets/audio/nature/wave.mp3'
     },
     {
@@ -345,7 +345,7 @@ const cardsData = [
     {
       word: 'tree',
       translation: 'дерево',
-      image: './assets/img/nature/tree.png',
+      image: './assets/img/nature/tree.jpg',
       audioSrc: './assets/audio/nature/tree.mp3'
     }
   ],
