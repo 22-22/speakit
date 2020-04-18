@@ -1,11 +1,12 @@
 import cardsData from './data'
-// import categoryNames from './data'
-const categoryNames = ['Action (set A)', 'Action (set B)', 'Emotions', 'Animal (set A)', 'Animal (set B)', 'City', 'Nature', 'Clothes'];
+// import categories from './data'
+const categories = ['Action (set A)', 'Action (set B)', 'Emotions', 'Animal (set A)', 'Animal (set B)', 'City', 'Nature', 'Clothes'];
 
 // сделать разметку для двух страниц, выкинуть их из дома и при переходе подставлять эти страницы в контейнер
 // get each page after the document is loaded
-const mainPage = document.querySelector('#main')
-let categoryPage = document.querySelector('#category')
+const mainPage = document.querySelector('#main');
+let categoryPage = document.querySelector('#category');
+const statsPage = document.querySelector('#stats');
 const pageContainer = document.querySelector('#pageContainer');
 const mainCard = document.querySelectorAll('.main-card');
 const burger = document.querySelector('.burger');
@@ -34,12 +35,15 @@ function audioShuffle(categoryCount) {
 // function soundNext(arr, count) {
 // }
 
-function generateCard(categoryCount) {
-  let count = 0;
+function generateCards(categoryCount) {
+  let soundCount = 0;
   let soundRandom;
   let soundCorrect = new Audio('./assets/audio/correct.mp3');
   let soundError = new Audio('./assets/audio/error.mp3');
+  let soundSuccess = new Audio('./assets/audio/success.mp3');
+  let soundFailure = new Audio('./assets/audio/failure.mp3');
   let random = audioShuffle(categoryCount);
+  let errorCount = 0;
 
   categoryPage.innerHTML = '';
   let cardElement;
@@ -69,8 +73,6 @@ function generateCard(categoryCount) {
   </div>`;
     }
 
-
-
     // game
     cardElement.lastChild.addEventListener('click', (e) => {
       if (!e.target.classList.contains('card__rotate') && switcher.checked === false) {
@@ -79,39 +81,60 @@ function generateCard(categoryCount) {
       } else {
         if (event.target.classList.contains('card-inactive')) return;
         if (document.querySelector('.btn').classList.contains('repeat')) {
-          if (e.target.getAttribute('data-word') === random[count].word) {
-            count++;
+          if (e.target.getAttribute('data-word') === random[soundCount].word) {
+            soundCount++;
             soundCorrect.play();
             document.querySelector('.rating').insertAdjacentHTML('beforeend', '<div class="star-correct"></div>');
-            event.target.classList.add('card-inactive');
-            setTimeout(function () {
-              soundRandom = new Audio(random[count].audioSrc);
-              soundRandom.play();
-            }, 800);
+            e.target.classList.add('card-inactive');
+
+            if (random[soundCount]) {
+              setTimeout(function () {
+                soundRandom = new Audio(random[soundCount].audioSrc);
+                soundRandom.play();
+              }, 800);
+            } else {
+              let gameResult = document.createElement('div');
+              gameResult.classList.add('game-result');
+
+              pageContainer.removeChild(categoryPage);
+              pageContainer.append(gameResult);
+
+              if (errorCount === 0) {
+                soundSuccess.play();
+                gameResult.insertAdjacentHTML('afterbegin', '<div class="game-result__info">Win!</div>')
+                gameResult.insertAdjacentHTML('beforeend', '<div class="game-result__image" style="background-image: url(./assets/img/success.jpg); "></div>')
+              } else {
+                soundFailure.play();
+                gameResult.insertAdjacentHTML('afterbegin', `<div class="game-result__info">Errors: ${errorCount}</div>`)
+                gameResult.insertAdjacentHTML('beforeend', '<div class="game-result__image" style="background-image: url(./assets/img/failure.jpg); "></div>')
+              }
+
+              setTimeout(function () {
+                pageContainer.removeChild(gameResult);
+                pageContainer.append(mainPage)
+              }, 3000);
+
+            }
+
             // soundNext(random, count);
           } else {
+            errorCount++;
             soundError.play();
             document.querySelector('.rating').insertAdjacentHTML('beforeend', '<div class="star-error"></div>');
           }
         }
       }
     })
-
     categoryPage.append(cardElement);
-
     return cardElement;
   });
-
-
 
   if (switcher.checked === false) {
     categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn hidden">Start game</button></div>')
     categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating none"></div>')
-
   } else {
     categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn">Start game</button></div>')
     categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating "></div>')
-
   }
 
   pageContainer.append(categoryPage);
@@ -120,8 +143,7 @@ function generateCard(categoryCount) {
   document.querySelector('.btn').addEventListener('click', (e) => {
     if (switcher.checked === true) {
       document.querySelector('.btn').classList.add('repeat');
-      let soundRandomFirst = new Audio(random[count].audioSrc);
-
+      let soundRandomFirst = new Audio(random[soundCount].audioSrc);
       soundRandomFirst.play();
 
       // if correct 
@@ -137,12 +159,12 @@ mainPage.addEventListener('click', (event) => {
   if (event.target.tagName === 'IMG' || event.target.tagName === 'A') {
     pageContainer.removeChild(mainPage);
     let currentCategory = 0;
-    categoryNames.forEach((item, idx) => {
+    categories.forEach((item, idx) => {
       if (item === event.target.textContent || item === event.target.getAttribute("alt")) {
         currentCategory = idx;
       }
     })
-    generateCard(currentCategory);
+    generateCards(currentCategory);
   }
 })
 
@@ -158,12 +180,10 @@ categoryPage.addEventListener('click', (event) => {
 
   document.querySelectorAll('.card').forEach(el => {
     el.addEventListener('mouseleave', (e) => {
-        el.classList.remove('translate');
+      el.classList.remove('translate');
     })
   })
 })
-
-
 
 // where to keep layout?
 // where to keep logic how to render lists?
@@ -180,12 +200,12 @@ document.querySelector('.menu').addEventListener('click', (event) => {
       } else {
         pageContainer.removeChild(mainPage);
         let currentCategory = 0;
-        categoryNames.forEach((item, idx) => {
+        categories.forEach((item, idx) => {
           if (item === event.target.textContent) {
             currentCategory = idx;
           }
         })
-        generateCard(currentCategory);
+        generateCards(currentCategory);
       }
     } else {
       if (event.target.textContent === 'Main Page') {
@@ -194,12 +214,12 @@ document.querySelector('.menu').addEventListener('click', (event) => {
       } else {
         pageContainer.removeChild(categoryPage);
         let currentCategory = 0;
-        categoryNames.forEach((item, idx) => {
+        categories.forEach((item, idx) => {
           if (item === event.target.textContent) {
             currentCategory = idx;
           }
         })
-        generateCard(currentCategory);
+        generateCards(currentCategory);
       }
     }
     burger.classList.remove('burger-active');
@@ -272,4 +292,98 @@ switcher.addEventListener('click', (e) => {
   }
 })
 
+// stats
+function generateStats() {
+  let words = [];
+  let translations = [];
+  let categoryNamesAll = []
+  let arrows = '<div class="arrows arrows-active" style="background-image: url(./assets/img/arrows.png); "></div>';
+  let wordsRow = document.createElement('div');
+  wordsRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">words</div>`);
+  wordsRow.insertAdjacentHTML('afterbegin', arrows);
+  let translationRow = document.createElement('div');
+  translationRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">translations</div>`);
+  translationRow.insertAdjacentHTML('afterbegin', arrows);
+
+  let categoryRow = document.createElement('div');
+  categoryRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">categories</div>`);
+  categoryRow.insertAdjacentHTML('afterbegin', arrows);
+
+  wordsRow.classList.add('col');
+  translationRow.classList.add('col');
+  categoryRow.classList.add('col');
+  for (let i = 0; i < cardsData.length; i++) {
+    for (let j = 0; j < cardsData[i].length; j++) {
+      wordsRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].word}</div>`);
+      translationRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].translation}</div>`);
+      categoryRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${categories[i]}</div>`);
+
+      words.push(cardsData[i][j].word);
+      translations.push(cardsData[i][j].translation);
+      categoryNamesAll.push(categories[i]);
+
+    }
+
+  }
+
+
+
+  statsPage.append(wordsRow);
+  statsPage.append(translationRow);
+  statsPage.append(categoryRow);
+  pageContainer.append(statsPage);
+
+  document.querySelectorAll('.arrows').forEach(el => {
+
+    el.addEventListener('click', (e) => {
+      let colName = e.target.nextElementSibling.textContent;
+    //  if (el.classList.contains('arrows-active')) {
+        
+      //  el.classList.remove('arrows-active');
+        if (colName === 'words') {
+          wordsRow.innerHTML = '';
+          wordsRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">words</div>`);
+          wordsRow.insertAdjacentHTML('afterbegin', arrows);
+          words.sort();
+          words.forEach((item, idx) => {
+            wordsRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+          })
+
+        } else if (colName === 'translations') {
+          translationRow.innerHTML = '';
+          translationRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">translations</div>`);
+          translationRow.insertAdjacentHTML('afterbegin', arrows);
+          translations.sort();
+          translations.forEach((item, idx) => {
+            translationRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+          })
+        } else {
+          categoryRow.innerHTML = '';
+          categoryRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">categories</div>`);
+          categoryRow.insertAdjacentHTML('afterbegin', arrows);
+          categoryNamesAll.sort();
+          categoryNamesAll.forEach((item, idx) => {
+            categoryRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+          })
+        }
+    //  } 
+    })
+  })
+}
+
+// open close stats
+document.querySelector('.stats-btn').addEventListener('click', (e) => {
+  if (document.querySelector('.stats-btn').checked === true) {
+    if (pageContainer.children[0].id === 'main') {
+      pageContainer.removeChild(mainPage);
+      generateStats();
+    } else {
+      pageContainer.removeChild(categoryPage);
+      generateStats();
+    }
+  } else {
+    pageContainer.removeChild(statsPage);
+    pageContainer.append(mainPage);
+  }
+})
 
