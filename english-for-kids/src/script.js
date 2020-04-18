@@ -46,16 +46,33 @@ function generateCard(categoryCount) {
   cardsData[categoryCount].forEach(el => {
     cardElement = document.createElement('div');
     cardElement.classList.add('card-container');
-    cardElement.innerHTML = ` <div class="card">
-  <div class="card__front" data-word="${el.word}" style="background-image: url(${el.image}); ">
-      <div class="card__word">${el.word}</div>
-  </div>
-  <div class="card__back  " style="background-image: url(${el.image}); ">
-      <div class="card__word">${el.translation}</div>
-  </div>
-  <div class="card__rotate"></div>
-</div>`;
-    cardElement.addEventListener('click', (e) => {
+
+    if (switcher.checked === false) {
+      cardElement.innerHTML = ` <div class="card">
+    <div class="card__front" data-word="${el.word}" style="background-image: url(${el.image}); ">
+        <div class="card__word">${el.word}</div>
+    </div>
+    <div class="card__back" style="background-image: url(${el.image}); ">
+        <div class="card__word">${el.translation}</div>
+    </div>
+    <div class="card__rotate"></div>
+  </div>`;
+    } else {
+      cardElement.innerHTML = ` <div class="card">
+    <div class="card__front card-cover" data-word="${el.word}" style="background-image: url(${el.image}); ">
+        <div class="card__word hidden">${el.word}</div>
+    </div>
+    <div class="card__back" style="background-image: url(${el.image}); ">
+        <div class="card__word hidden">${el.translation}</div>
+    </div>
+    <div class="card__rotate hidden"></div>
+  </div>`;
+    }
+
+
+
+    // game
+    cardElement.lastChild.addEventListener('click', (e) => {
       if (!e.target.classList.contains('card__rotate') && switcher.checked === false) {
         let sound = new Audio(el.audioSrc);
         sound.play();
@@ -79,14 +96,25 @@ function generateCard(categoryCount) {
         }
       }
     })
+
     categoryPage.append(cardElement);
+
     return cardElement;
   });
-  // go back on main page we can only when click to menu
-  categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating"></div>')
-  categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn hidden">Start game</button></div>')
-  pageContainer.append(categoryPage);
 
+
+
+  if (switcher.checked === false) {
+    categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn hidden">Start game</button></div>')
+    categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating none"></div>')
+
+  } else {
+    categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn">Start game</button></div>')
+    categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating "></div>')
+
+  }
+
+  pageContainer.append(categoryPage);
   // return pageContainer;
 
   document.querySelector('.btn').addEventListener('click', (e) => {
@@ -127,27 +155,18 @@ categoryPage.addEventListener('click', (event) => {
       })
     }
   });
-})
 
-categoryPage.addEventListener('mouseout', (event) => {
   document.querySelectorAll('.card').forEach(el => {
-    el.classList.remove('translate');
+    el.addEventListener('mouseleave', (e) => {
+        el.classList.remove('translate');
+    })
   })
 })
 
+
+
 // where to keep layout?
 // where to keep logic how to render lists?
-
-// burger
-burger.addEventListener('click', (e) => {
-  if (burger.classList.contains('burger-active')) {
-    burger.classList.remove('burger-active');
-    document.querySelector('.menu').classList.remove('menu-active');
-  } else {
-    burger.classList.add('burger-active');
-    document.querySelector('.menu').classList.add('menu-active');
-  }
-})
 
 // menu links
 document.querySelector('.menu').addEventListener('click', (event) => {
@@ -156,7 +175,6 @@ document.querySelector('.menu').addEventListener('click', (event) => {
     event.target.classList.add('link__active');
     if (pageContainer.children[0].id === 'main') {
       if (event.target.textContent === 'Main Page') {
-
         burger.classList.remove('burger-active');
         document.querySelector('.menu').classList.remove('menu-active');
       } else {
@@ -174,7 +192,6 @@ document.querySelector('.menu').addEventListener('click', (event) => {
         pageContainer.removeChild(categoryPage);
         pageContainer.append(mainPage);
       } else {
-
         pageContainer.removeChild(categoryPage);
         let currentCategory = 0;
         categoryNames.forEach((item, idx) => {
@@ -190,18 +207,40 @@ document.querySelector('.menu').addEventListener('click', (event) => {
   }
 })
 
-// document.addEventListener('click', (e) => {
-//     burger.classList.remove('burger-active');
-//     document.querySelector('.menu').classList.remove('menu-active');
-// })
+// open or close burger menu
+document.addEventListener('click', (e) => {
+  if (e.target === burger || e.target === document.querySelector('.burger__line')) {
+    if (burger.classList.contains('burger-active')) {
+      burger.classList.remove('burger-active');
+      document.querySelector('.menu').classList.remove('menu-active');
+    } else {
+      if (switcher.checked === true) {
+        document.querySelector('.menu').classList.add('menu-red');
+      }
+      burger.classList.add('burger-active');
+      document.querySelector('.menu').classList.add('menu-active');
+    }
+  } else if (e.target === document.querySelector('.menu')) {
+    return;
+  } else {
+    burger.classList.remove('burger-active');
+    document.querySelector('.menu').classList.remove('menu-active');
+  }
+})
 
 switcher.addEventListener('click', (e) => {
+  if (switcher.checked === false) {
+    document.querySelector('.menu').classList.remove('menu-red');
+  } else {
+    document.querySelector('.menu').classList.add('menu-red');
+  }
+
   if (pageContainer.children[0].id === 'main') {
     mainCard.forEach(el => {
       if (switcher.checked === true) {
-        el.classList.add('red');
+        el.classList.add('card-red');
       } else {
-        el.classList.remove('red');
+        el.classList.remove('card-red');
       }
     })
   } else {
@@ -214,8 +253,8 @@ switcher.addEventListener('click', (e) => {
       })
       document.querySelectorAll('.card__front').forEach(el => {
         el.classList.add('card-cover');
-        document.querySelector('.btn').classList.remove('hidden');
       })
+      document.querySelector('.btn').classList.remove('hidden');
     } else {
       document.querySelectorAll('.card__rotate').forEach(el => {
         el.classList.remove('hidden');
@@ -225,8 +264,10 @@ switcher.addEventListener('click', (e) => {
       })
       document.querySelectorAll('.card__front').forEach(el => {
         el.classList.remove('card-cover');
+        el.classList.remove('card-inactive');
       })
       document.querySelector('.btn').classList.add('hidden');
+      document.querySelector('.rating').innerHTML = '';
     }
   }
 })
