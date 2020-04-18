@@ -319,10 +319,10 @@ const cardsData = [
       audioSrc: './assets/audio/nature/mountain.mp3'
     },
     {
-      word: 'sky',
-      translation: 'небо',
-      image: './assets/img/nature/sky.png',
-      audioSrc: './assets/audio/nature/sky.mp3'
+      word: 'night',
+      translation: 'ночь',
+      image: './assets/img/nature/night.png',
+      audioSrc: './assets/audio/nature/night.mp3'
     },
     {
       word: 'watermelon',
