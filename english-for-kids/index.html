@@ -14,22 +14,22 @@
             <div class="burger">
                 <span class="burger__line"></span>
             </div>
-                <ul class="menu">
-                    <a class="menu__item" href="#/">Main Page</a>
-                    <a class="menu__item" href="#/cards">Action (set A)</a>
-                    <a class="menu__item" href="#/cards">Action (set B)</a>
-                    <a class="menu__item" href="#/cards">Emotions</a>
-                    <a class="menu__item" href="#/cards">Animal (set A)</a>
-                    <a class="menu__item" href="#/cards">Animal (set B)</a>
-                    <a class="menu__item" href="#/cards">City</a>
-                    <a class="menu__item" href="#/cards">Nature</a>
-                    <a class="menu__item" href="#/cards">Clothes</a>
-                </ul>
+            <ul class="menu">
+                <a class="menu__item" href="#/">Main Page</a>
+                <a class="menu__item" href="#/cards">Action (set A)</a>
+                <a class="menu__item" href="#/cards">Action (set B)</a>
+                <a class="menu__item" href="#/cards">Emotions</a>
+                <a class="menu__item" href="#/cards">Animal (set A)</a>
+                <a class="menu__item" href="#/cards">Animal (set B)</a>
+                <a class="menu__item" href="#/cards">City</a>
+                <a class="menu__item" href="#/cards">Nature</a>
+                <a class="menu__item" href="#/cards">Clothes</a>
+            </ul>
         </nav>
-        <label class="stats-container">Stats
+        <label class="stats-container">STATS
             <input class="stats-btn" type="checkbox">
             <span class="checkmark"></span>
-          </label>
+        </label>
         <input class="switcher" type="checkbox">
     </header>
     <main id="pageContainer">
@@ -48,9 +48,27 @@
             <a class="main-card" href="#/cards"><img src="./assets/img/main/skirt.jpg" alt="Clothes">Clothes</a>
         </div>
         <div id="category" class="container">
-        <div id="stats" class="table"></div>
     </main>
+    <div class=" hidden" id="table">
+        <div class="col hidden" id="words">
+                <div class=" arrow-down" style="background-image: url(./assets/img/arrow-down.png); "></div>
+                <div class=" arrow-up" style="background-image: url(./assets/img/arrow-up.png); "></div>    
+            <div style="order:1;" class="table-cell col-name">words</div>
+            <div class="words-col"></div>
+        </div>
+        <div class="col hidden" id="translations">
+                <div class=" arrow-down" style="background-image: url(./assets/img/arrow-down.png); "></div>
+                <div class=" arrow-up" style="background-image: url(./assets/img/arrow-up.png); "></div>
+            <div style="order:1;" class="table-cell col-name">translations</div>
+            <div class="translations-col"></div>
+        </div>
+        <div class="col hidden" id="categories">          
+                <div class=" arrow-down" style="background-image: url(./assets/img/arrow-down.png); "></div>
+                <div class=" arrow-up" style="background-image: url(./assets/img/arrow-up.png); "></div>         
+            <div style="order:1;" class="table-cell col-name">categories</div>
+            <div class="categories-col"></div>
+        </div>
+    </div>
 </body>
 
 </html>
-
