@@ -286,6 +286,11 @@
     opacity: .5;
 }
 
+.cat-name {
+    font-size: 30px;
+    color: #212529;
+}
+
 /**************BUTTON*******************/
 
 .btn-container {
