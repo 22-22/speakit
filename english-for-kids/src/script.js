@@ -65,6 +65,7 @@ function generateCards(categoryCount) {
   </div>`;
     }
 
+    
     // game
     cardElement.lastChild.addEventListener('click', (e) => {
       if (!e.target.classList.contains('card__rotate') && switcher.checked === false) {
@@ -125,9 +126,13 @@ function generateCards(categoryCount) {
   if (switcher.checked === false) {
     categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn hidden">Start game</button></div>')
     categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating none"></div>')
+    categoryPage.insertAdjacentHTML('afterbegin', `<div class="cat-name">${categories[categoryCount]}</div>`)
+
   } else {
     categoryPage.insertAdjacentHTML('beforeend', '<div class="btn-container"><button class="btn">Start game</button></div>')
     categoryPage.insertAdjacentHTML('afterbegin', '<div class="rating "></div>')
+    categoryPage.insertAdjacentHTML('afterbegin', `<div class="cat-name">${categories[categoryCount]}</div>`)
+
   }
 
   pageContainer.append(categoryPage);
