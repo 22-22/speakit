@@ -146,7 +146,7 @@ const cardsData = [
       word: 'cry',
       translation: 'плач',
       image: './assets/img/emotions/cry.jpg',
-      audioSrc: './assets/audio/emotions/laugh.mp3'
+      audioSrc: './assets/audio/emotions/cry.mp3'
     }
   ],
   [
