@@ -1,23 +1,18 @@
 import cardsData from './data'
-// import categories from './data'
-const categories = ['Action (set A)', 'Action (set B)', 'Emotions', 'Animal (set A)', 'Animal (set B)', 'City', 'Nature', 'Clothes'];
 
-// сделать разметку для двух страниц, выкинуть их из дома и при переходе подставлять эти страницы в контейнер
-// get each page after the document is loaded
+// get each page when the document is loaded
 const mainPage = document.querySelector('#main');
 let categoryPage = document.querySelector('#category');
-const statsPage = document.querySelector('#stats');
 const pageContainer = document.querySelector('#pageContainer');
-const mainCard = document.querySelectorAll('.main-card');
 const burger = document.querySelector('.burger');
 const switcher = document.querySelector('.switcher');
+const wordsCol = document.querySelector('.words-col');
+const translationsCol = document.querySelector('.translations-col');
+const categoriesCol = document.querySelector('.categories-col');
+const categories = ['Action (set A)', 'Action (set B)', 'Emotions', 'Animal (set A)', 'Animal (set B)', 'City', 'Nature', 'Clothes'];
 
 // remove templates from DOM
-// pageContainer.removeChild(mainPage);
 pageContainer.removeChild(categoryPage);
-
-// append mainPage
-// pageContainer.append(mainPage);
 
 function audioShuffle(categoryCount) {
   let arrShuffle = [];
@@ -31,9 +26,6 @@ function audioShuffle(categoryCount) {
   })
   return arrShuffle;
 }
-
-// function soundNext(arr, count) {
-// }
 
 function generateCards(categoryCount) {
   let soundCount = 0;
@@ -95,7 +87,6 @@ function generateCards(categoryCount) {
             } else {
               let gameResult = document.createElement('div');
               gameResult.classList.add('game-result');
-
               pageContainer.removeChild(categoryPage);
               pageContainer.append(gameResult);
 
@@ -112,11 +103,13 @@ function generateCards(categoryCount) {
               setTimeout(function () {
                 pageContainer.removeChild(gameResult);
                 pageContainer.append(mainPage)
+                document.querySelectorAll('.main-card').forEach(el => {
+                  el.classList.add('card-red');
+
+                })
+
               }, 3000);
-
             }
-
-            // soundNext(random, count);
           } else {
             errorCount++;
             soundError.play();
@@ -138,19 +131,12 @@ function generateCards(categoryCount) {
   }
 
   pageContainer.append(categoryPage);
-  // return pageContainer;
 
   document.querySelector('.btn').addEventListener('click', (e) => {
     if (switcher.checked === true) {
       document.querySelector('.btn').classList.add('repeat');
       let soundRandomFirst = new Audio(random[soundCount].audioSrc);
       soundRandomFirst.play();
-
-      // if correct 
-      // success sound, success star, right card inactive, nextSound()
-
-      // if wrong
-      // error sound, error star
     }
   })
 }
@@ -185,17 +171,15 @@ categoryPage.addEventListener('click', (event) => {
   })
 })
 
-// where to keep layout?
-// where to keep logic how to render lists?
-
 // menu links
 document.querySelector('.menu').addEventListener('click', (event) => {
   if (event.target.tagName === 'A') {
-    document.querySelectorAll('.menu__item').forEach(el => el.classList.remove('link__active'));
-    event.target.classList.add('link__active');
+    document.querySelectorAll('.menu__item').forEach(el => el.classList.remove('link-active'));
+    event.target.classList.add('link-active');
     if (pageContainer.children[0].id === 'main') {
       if (event.target.textContent === 'Main Page') {
-        burger.classList.remove('burger-active');
+        burger.classList.remove('active');
+        document.querySelector('.burger__line').classList.remove('burger-active')
         document.querySelector('.menu').classList.remove('menu-active');
       } else {
         pageContainer.removeChild(mainPage);
@@ -222,7 +206,8 @@ document.querySelector('.menu').addEventListener('click', (event) => {
         generateCards(currentCategory);
       }
     }
-    burger.classList.remove('burger-active');
+    burger.classList.remove('active');
+    document.querySelector('.burger__line').classList.remove('burger-active')
     document.querySelector('.menu').classList.remove('menu-active');
   }
 })
@@ -230,20 +215,23 @@ document.querySelector('.menu').addEventListener('click', (event) => {
 // open or close burger menu
 document.addEventListener('click', (e) => {
   if (e.target === burger || e.target === document.querySelector('.burger__line')) {
-    if (burger.classList.contains('burger-active')) {
-      burger.classList.remove('burger-active');
+    if (burger.classList.contains('active')) {
+      burger.classList.remove('active');
+      document.querySelector('.burger__line').classList.remove('burger-active')
       document.querySelector('.menu').classList.remove('menu-active');
     } else {
       if (switcher.checked === true) {
         document.querySelector('.menu').classList.add('menu-red');
       }
-      burger.classList.add('burger-active');
+      burger.classList.add('active');
+      document.querySelector('.burger__line').classList.add('burger-active')
       document.querySelector('.menu').classList.add('menu-active');
     }
   } else if (e.target === document.querySelector('.menu')) {
     return;
   } else {
-    burger.classList.remove('burger-active');
+    burger.classList.remove('active');
+    document.querySelector('.burger__line').classList.remove('burger-active')
     document.querySelector('.menu').classList.remove('menu-active');
   }
 })
@@ -256,7 +244,7 @@ switcher.addEventListener('click', (e) => {
   }
 
   if (pageContainer.children[0].id === 'main') {
-    mainCard.forEach(el => {
+    document.querySelectorAll('.main-card').forEach(el => {
       if (switcher.checked === true) {
         el.classList.add('card-red');
       } else {
@@ -292,98 +280,93 @@ switcher.addEventListener('click', (e) => {
   }
 })
 
-// stats
+// stats generation
+let words = [];
+let translations = [];
+let categoryNamesAll = [];
+
 function generateStats() {
-  let words = [];
-  let translations = [];
-  let categoryNamesAll = []
-  let arrows = '<div class="arrows arrows-active" style="background-image: url(./assets/img/arrows.png); "></div>';
-  let wordsRow = document.createElement('div');
-  wordsRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">words</div>`);
-  wordsRow.insertAdjacentHTML('afterbegin', arrows);
-  let translationRow = document.createElement('div');
-  translationRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">translations</div>`);
-  translationRow.insertAdjacentHTML('afterbegin', arrows);
-
-  let categoryRow = document.createElement('div');
-  categoryRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">categories</div>`);
-  categoryRow.insertAdjacentHTML('afterbegin', arrows);
-
-  wordsRow.classList.add('col');
-  translationRow.classList.add('col');
-  categoryRow.classList.add('col');
   for (let i = 0; i < cardsData.length; i++) {
     for (let j = 0; j < cardsData[i].length; j++) {
-      wordsRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].word}</div>`);
-      translationRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].translation}</div>`);
-      categoryRow.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${categories[i]}</div>`);
-
+      wordsCol.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].word}</div>`);
+      translationsCol.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${cardsData[i][j].translation}</div>`);
+      categoriesCol.insertAdjacentHTML('beforeend', `<div style="order:${i};" class="table-cell">${categories[i]}</div>`);
       words.push(cardsData[i][j].word);
       translations.push(cardsData[i][j].translation);
       categoryNamesAll.push(categories[i]);
-
     }
-
   }
-
-
-
-  statsPage.append(wordsRow);
-  statsPage.append(translationRow);
-  statsPage.append(categoryRow);
-  pageContainer.append(statsPage);
-
-  document.querySelectorAll('.arrows').forEach(el => {
-
-    el.addEventListener('click', (e) => {
-      let colName = e.target.nextElementSibling.textContent;
-    //  if (el.classList.contains('arrows-active')) {
-        
-      //  el.classList.remove('arrows-active');
-        if (colName === 'words') {
-          wordsRow.innerHTML = '';
-          wordsRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">words</div>`);
-          wordsRow.insertAdjacentHTML('afterbegin', arrows);
-          words.sort();
-          words.forEach((item, idx) => {
-            wordsRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
-          })
-
-        } else if (colName === 'translations') {
-          translationRow.innerHTML = '';
-          translationRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">translations</div>`);
-          translationRow.insertAdjacentHTML('afterbegin', arrows);
-          translations.sort();
-          translations.forEach((item, idx) => {
-            translationRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
-          })
-        } else {
-          categoryRow.innerHTML = '';
-          categoryRow.insertAdjacentHTML('afterbegin', `<div style="order:1;" class="table-cell col-name">categories</div>`);
-          categoryRow.insertAdjacentHTML('afterbegin', arrows);
-          categoryNamesAll.sort();
-          categoryNamesAll.forEach((item, idx) => {
-            categoryRow.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
-          })
-        }
-    //  } 
-    })
-  })
+  return words, translations, categoryNamesAll;
 }
+
+// stats sort
+document.querySelectorAll('.arrow-down').forEach(el => {
+  el.addEventListener('click', (e) => {
+    let colNameCurrent = e.target.parentElement.attributes["id"].value;
+    if (colNameCurrent === 'words') {
+      wordsCol.innerHTML = '';
+      words.sort().reverse();
+      words.forEach((item, idx) => {
+        wordsCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+
+    } else if (colNameCurrent === 'translations') {
+      translationsCol.innerHTML = '';
+      translations.sort().reverse();
+      translations.forEach((item, idx) => {
+        translationsCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+    } else {
+      categoriesCol.innerHTML = '';
+      categoryNamesAll.sort().reverse();
+      categoryNamesAll.forEach((item, idx) => {
+        categoriesCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+    }
+  })
+})
+
+document.querySelectorAll('.arrow-up').forEach(el => {
+  el.addEventListener('click', (e) => {
+    console.log(e.target)
+    let colNameCurrent = e.target.nextElementSibling.textContent;
+    if (colNameCurrent === 'words') {
+      wordsCol.innerHTML = '';
+      words.sort();
+      words.forEach((item, idx) => {
+        wordsCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+    } else if (colNameCurrent === 'translations') {
+      translationsCol.innerHTML = '';
+      translations.sort();
+      translations.forEach((item, idx) => {
+        translationsCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+    } else {
+      categoriesCol.innerHTML = '';
+      categoryNamesAll.sort();
+      categoryNamesAll.forEach((item, idx) => {
+        categoriesCol.insertAdjacentHTML('beforeend', `<div style="order:${idx};" class="table-cell">${item}</div>`);
+      })
+    }
+  })
+})
 
 // open close stats
 document.querySelector('.stats-btn').addEventListener('click', (e) => {
   if (document.querySelector('.stats-btn').checked === true) {
-    if (pageContainer.children[0].id === 'main') {
-      pageContainer.removeChild(mainPage);
-      generateStats();
-    } else {
-      pageContainer.removeChild(categoryPage);
-      generateStats();
-    }
+    document.querySelector('#table').classList.remove('hidden');
+    document.querySelector('#table').classList.add('table');
+    document.querySelectorAll('.col').forEach(el => {
+      el.classList.remove('hidden');
+    })
+    generateStats();
   } else {
-    pageContainer.removeChild(statsPage);
-    pageContainer.append(mainPage);
+    document.querySelector('#table').classList.remove('table');
+    document.querySelector('#table').classList.add('hidden');
+    document.querySelectorAll('.col').forEach(el => {
+      el.classList.add('hidden');
+    })
   }
 })
 
