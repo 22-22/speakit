@@ -142,7 +142,7 @@
     -webkit-font-smoothing: antialiased;
     transition: transform .5s cubic-bezier(.77,.2,.05,1); 
     transform: translate(-100%);
-    z-index: 2;
+    z-index: 3;
 }
 
 .menu-active {
@@ -388,7 +388,7 @@
     top: 0;
     left: 0;
    width: 100%;
-   z-index: 10;
+   z-index: 2;
 }
 
 
