@@ -100,11 +100,16 @@ h1 {
 }
 
 .image {
-    width: 350px;
+    width: 330px;
     height: 220px;
     box-shadow: 5px 5px 25px rgba(118,118,118,.25);
     border-radius: 8px;
     margin: 10px 0;
+    object-fit: contain;
+}
+
+.main-image {
+    object-fit: cover;
 }
 
 .translation-displayed {
@@ -216,18 +221,26 @@ h1 {
     width: 100%;
     max-width: 780px;
     padding: 40px 100px;
-    /* min-height: 600px; */
     background-color: white;
-    /* text-align: left; */
     box-sizing: border-box;
+    border-radius: 10px;
 }
 
+.errors {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
 .errors-number {
     background-color: tomato;
     color: white;
     border-radius: 30%;
     padding: 0 10px;
     margin-left: 5px;
+}
+
+.success {
+    margin: 10px 0;
+    font-size: 24px;
 }
 
 .success-number {
@@ -244,7 +257,6 @@ h1 {
     background-color: white;
     margin: 0;
     box-shadow: none;
-    /* min-height: 50px; */
     padding: 0 0 0 50px;
 }
 
