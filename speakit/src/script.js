@@ -80,6 +80,7 @@ document.querySelector('.nav').addEventListener('click', (e) => {
   let group = currentNav.textContent - 1;
   let page = calculatePage();
   getWords(page, group);
+  returnToRegularMode(e) 
 })
 
 function showResults(e) {
