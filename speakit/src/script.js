@@ -158,6 +158,7 @@ function returnToRegularMode(e) {
   document.querySelector('.translation-displayed').textContent = '';
   document.querySelector('.items').addEventListener('click', onItemClick);
   image.src = './assets/img/main.jpg';
+  document.querySelector('.success-number').textContent = '0';
 }
 
 // speech recognition end
