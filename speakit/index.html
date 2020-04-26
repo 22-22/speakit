@@ -31,17 +31,34 @@
             <div class="images">
                 <div class="input-speech hidden" type="text"></div>
                 <img class="image" src="./assets/img/main.jpg" alt="main">
-                <div class="translation"></div>
+                <div class="translation-displayed"></div>
             </div>
             <div class="items">
             </div>
             <div class="btns">
-                <a href="#" class="btn-restart">Restart</a>
-                <a href="#" class="btn-speech btn-wide">Speak please</a>
-                <a href="#" class="btn-results">Results</a>
+                <a href="#" class="btn btn-restart">Restart</a>
+                <a href="#" class="btn btn-speech btn-wide">Speak please</a>
+                <a href="#" class="btn btn-results">Results</a>
             </div>
         </div>
-        <div class="results"></div>
+        <div class="results hidden">
+            <div class="results-container">
+                <p class="errors">Ошибок
+                    <span class="errors-number"></span>
+                </p>
+                <div class="error-items">
+                </div>
+                <p class="success">Знаю
+                    <span class="success-number">0</span>
+                </p>
+                <div class="success-items">
+                </div>
+                <div class="results--btns">
+                    <a href="#" class="btn btn-return">Return</a>
+                    <a href="#" class="btn res--btn-restart">Restart</a>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 
